@@ -9,7 +9,7 @@ import anthropic
 from mock_data import CUSTOMERS, PRODUCTS
 
 client = anthropic.Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
-MODEL = "claude-sonnet-4-20250514"
+MODEL = "claude-sonnet-4-5"
 
 
 def get_customer_context(customer_id: str) -> dict:
