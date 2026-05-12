@@ -127,6 +127,7 @@ Analyze this RFQ and return the JSON response per your instructions."""
     response = client.messages.create(
         model=MODEL,
         max_tokens=2000,
+        temperature=0,
         system=SYSTEM_PROMPT,
         messages=[{"role": "user", "content": user_message}],
     )
