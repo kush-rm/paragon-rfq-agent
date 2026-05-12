@@ -29,15 +29,26 @@ st.caption("Confidence-calibrated quoting for industrial distribution — demo w
 st.divider()
 
 # ── Sidebar: customer + sample loader ────────────────────────────────────────
+customer_keys = list(CUSTOMERS.keys())
+customer_options = {cid: f"{cid} — {c['name']}" for cid, c in CUSTOMERS.items()}
+
+# Initialise selected customer in session state
+if "selected_customer_id" not in st.session_state:
+    st.session_state["selected_customer_id"] = customer_keys[0]
+
 with st.sidebar:
     st.header("Configuration")
 
-    customer_options = {cid: f"{cid} — {c['name']}" for cid, c in CUSTOMERS.items()}
+    # Drive selectbox index from session_state so sample buttons can change it
     selected_customer_id = st.selectbox(
         "Customer",
-        options=list(customer_options.keys()),
+        options=customer_keys,
         format_func=lambda k: customer_options[k],
+        index=customer_keys.index(st.session_state["selected_customer_id"]),
     )
+    # Keep session state in sync when user manually changes the dropdown
+    st.session_state["selected_customer_id"] = selected_customer_id
+
     customer = CUSTOMERS[selected_customer_id]
 
     st.markdown(f"**Contact:** {customer['contact']}")
@@ -49,18 +60,10 @@ with st.sidebar:
     st.subheader("Load a sample RFQ")
     for i, sample in enumerate(SAMPLE_RFQS):
         if st.button(sample["label"], key=f"sample_{i}"):
+            # Fix: update session_state BEFORE rerun so selectbox renders correctly
+            st.session_state["selected_customer_id"] = sample["customer_id"]
             st.session_state["rfq_email"] = sample["email"]
-            st.session_state["sample_customer"] = sample["customer_id"]
-            # Switch the selectbox by re-running — we store the override
-            st.session_state["override_customer"] = sample["customer_id"]
             st.rerun()
-
-# Honor customer override from sample loader
-if "override_customer" in st.session_state:
-    override = st.session_state.pop("override_customer")
-    # We can't retroactively change the selectbox value in Streamlit without rerun,
-    # but we can use the override for the actual API call below.
-    selected_customer_id = override
 
 # ── Main input ───────────────────────────────────────────────────────────────
 col_left, col_right = st.columns([1, 1], gap="large")
