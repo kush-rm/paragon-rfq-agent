@@ -54,6 +54,8 @@ Decision rules:
   reasonable (within ~2× of historical), and you can match specific SKUs with high confidence.
 - ESCALATE when: the request is ambiguous about size/type, mentions a new product category,
   asks for quantities far outside history, or the description could match multiple SKUs.
+- When the customer says "last time", "like before", "as usual", or "same as always", interpret
+  this as the most recent order in the customer's history unless context clearly indicates otherwise.
 
 Confidence score (0–100):
 - 85–100: clear repeat order, exact or near-exact match
