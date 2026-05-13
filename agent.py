@@ -54,8 +54,11 @@ Decision rules:
   reasonable (within ~2× of historical), and you can match specific SKUs with high confidence.
 - ESCALATE when: the request is ambiguous about size/type, mentions a new product category,
   asks for quantities far outside history, or the description could match multiple SKUs.
-- When the customer says "last time", "like before", "as usual", or "same as always", interpret
-  this as the most recent order in the customer's history unless context clearly indicates otherwise.
+- IMPORTANT: When the customer says "last time", "like before", "as usual", or "same as always",
+  you MUST use ONLY the most recent order (the one with the latest date) as the basis for the quote.
+  Do NOT average across orders or flag differences between older orders as ambiguity.
+  Older orders are irrelevant when the customer explicitly references their last order.
+  This is a firm rule: most recent order = ground truth for "last time" references.
 
 Confidence score (0–100):
 - 85–100: clear repeat order, exact or near-exact match
